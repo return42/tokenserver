@@ -1,15 +1,15 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this file,
 # You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# pylint: disable=C0413
 
 import sys
+
 from tokenserver.util import monkey_patch_gevent
-
-
 runner = sys.argv[0]
-if runner.endswith('nosetests'):
+if runner.endswith('pytest'):
     monkey_patch_gevent()
-
 
 import logging
 from collections import defaultdict
@@ -19,9 +19,18 @@ from tokenserver.assignment import INodeAssignment
 from mozsvc.config import get_configurator
 from mozsvc.plugin import load_and_register, load_from_settings
 
+import six
+
+__version__      = "2.0.0rc1"
+__description__  = "Token Server as defined at https://wiki.mozilla.org/Services/Sagrada/TokenServer"
+__url__          = "https://github.com/mozilla-services/tokenserver"
+__license__      = "MPLv2.0"
+__author__       = 'Mozilla Services'
+__author_email__ = 'dev-identity@lists.mozilla.org'
+__keywords__     = 'token server'
+
 
 logger = logging.getLogger('tokenserver')
-
 
 def includeme(config):
     settings = config.registry.settings

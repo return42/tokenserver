@@ -1,6 +1,7 @@
 include *.txt
 include *.rst
 include *.spec
-recursive-include etc *.ini *.conf 
+recursive-include etc *.ini *.conf
 recursive-include tokenserver *.json *.ini
 include tokenserver/tests/secrets
+include README.md

@@ -1,44 +1,77 @@
-alembic==0.6.7
-boto==2.34
-Chameleon==2.16
-chardet==2.3
-cornice==0.17
-coverage==3.7.1
-docutils==0.12
-gevent==1.0.2
-greenlet==0.4.5
-hawkauthlib==0.1.1
-Jinja2==2.7.3
-konfig==0.9
-Mako==1.0
-MarkupSafe==0.23
-mozsvc==0.8
-ordereddict==1.1
-Paste==1.7.5.1
-PasteDeploy==1.5.2
-PasteScript==1.7.5
-PyBrowserID==0.9.2
-Pygments==2.0rc1
-PyMySQL==0.6.2
-pymysql_sa==1.0
-pyramid==1.5.1
-pyramid_debugtoolbar==2.2
-pyramid_jinja2==2.3.3
-repoze.lru==0.6
-requests==2.4.3
-simplejson==3.6.5
-Sphinx==1.3b1
-SQLAlchemy==0.9.8
-testfixtures==4.1
-tokenlib==0.3.1
-translationstring==1.1
-umemcache==1.6.3
-unittest2==0.6
-venusian==1.0
-WebOb==1.4
-WebTest==2.0.16
-wsgi_intercept==0.8.1
-zope.component==4.2.1
-zope.deprecation==4.1.1
-zope.event==4.0.3
-zope.interface==4.1.1
+# ----- required by externe
+
+-e file:../konfig#egg=konfig
+# konfig >= 2.0
+# git+https://github.com/return42/konfig@six#egg=konfig
+
+-e file:../tokenlib#egg=tokenlib
+# tokenlib >= 2.0
+# git+https://github.com/return42/tokenlib@six#egg=tokenlib
+
+-e file:../hawkauthlib#egg=hawkauthlib
+# hawkauthlib >= 2.0
+# git+https://github.com/return42/hawkauthlib@six#egg=hawkauthlib
+
+-e file:../pyramid_hawkauth#egg=pyramid_hawkauth
+# pyramid_hawkauth >= 2.0
+# git+https://github.com/return42/pyramid_hawkauth@six#egg=pyramid_hawkauth
+
+# FIXME: ATM m2crypto is only available for Py2, This is my workaround to build
+# m2crypto for Py3 also. For this, a local checkout of the 'six' branch from
+#
+#   https://github.com/return42/m2crypto/commits/six
+#
+# is needed.
+#
+# file:../m2crypto#egg=M2Crypto
+# M2Crypto > 0.25.1
+git+https://github.com/return42/m2crypto@six#egg=M2Crypto
+
+
+# --------
+# requires
+# --------
+
+-e file:../mozservices#egg=mozsvc
+# mozservices >= 2.0
+# git+https://github.com/return42/mozservices@six#egg=mozsvc
+
+-e file:../PyBrowserID#egg=PyBrowserID
+# PyBrowserID >= 2.0
+# git+https://github.com/return42/PyBrowserID@six#egg=PyBrowserID
+
+cornice
+gevent
+pyramid
+pyzmq
+requests
+SQLAlchemy
+zope.interface
+
+Paste
+PasteDeploy
+PasteScript
+
+
+# --------
+# develop
+# --------
+
+mock
+pip
+pylint
+pytest
+pytest-cov
+Sphinx
+testfixtures
+tox
+twine
+WebTest
+wheel
+
+# ----------------------------
+# migration and administration
+# ----------------------------
+
+alembic
+boto
