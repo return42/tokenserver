@@ -19,7 +19,7 @@ from sqlalchemy.pool import NullPool
 from sqlalchemy.sql import text as sqltext, func as sqlfunc
 from sqlalchemy.exc import OperationalError, TimeoutError
 
-from zope.interface import implements
+from zope.interface import implementer
 from tokenserver.assignment import INodeAssignment
 from tokenserver.util import get_timestamp
 
@@ -169,9 +169,8 @@ where
 """)
 
 
+@implementer(INodeAssignment)
 class SQLNodeAssignment(object):
-
-    implements(INodeAssignment)
 
     def __init__(self, sqluri, create_tables=False, pool_size=100,
                  pool_recycle=60, pool_timeout=30, max_overflow=10,
@@ -233,7 +232,7 @@ class SQLNodeAssignment(object):
 
         try:
             return engine.execute(*args, **kwds)
-        except (OperationalError, TimeoutError), exc:
+        except (OperationalError, TimeoutError) as exc:
             err = traceback.format_exc()
             logger.error(err)
             raise BackendError(str(exc))
@@ -596,7 +595,7 @@ class SQLNodeAssignment(object):
 
         # We may have to re-try the query if we need to release more capacity.
         # This loop allows a maximum of five retries before bailing out.
-        for _ in xrange(5):
+        for _ in range(5):
             res = self._safe_execute(query)
             row = res.fetchone()
             res.close()

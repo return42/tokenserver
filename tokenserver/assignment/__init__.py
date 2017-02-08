@@ -1,7 +1,7 @@
 from zope.interface import Interface
 
 
-class INodeAssignment(Interface):
+class INodeAssignment(Interface):  # pylint: disable=E0239
     """Interface definition for backend node-assignment db."""
 
     def get_user(self, service, email):

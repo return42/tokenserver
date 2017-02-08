@@ -5,6 +5,8 @@
 import os
 import re
 import threading
+import unittest
+
 from wsgiref.simple_server import make_server
 
 import tokenlib
@@ -14,7 +16,6 @@ import pyramid.testing
 from mozsvc.config import load_into_settings
 
 from tokenserver.assignment import INodeAssignment
-from tokenserver.tests.support import unittest
 from tokenserver.scripts.purge_old_records import purge_old_records
 
 

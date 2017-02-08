@@ -1,19 +1,18 @@
 
 from pyramid.threadlocal import get_current_registry
-from zope.interface import implements
+from zope.interface import implementer
 
 from tokenserver.assignment import INodeAssignment
 from tokenserver.util import get_timestamp
 
 from mozsvc.exceptions import BackendError
 
-
+@implementer(INodeAssignment)
 class MemoryNodeAssignmentBackend(object):
     """Simple in-memory INodeAssignment backend.
 
     This is useful for testing purposes and probably not much else.
     """
-    implements(INodeAssignment)
 
     def __init__(self, service_entry=None, **kw):
         self._service_entry = service_entry

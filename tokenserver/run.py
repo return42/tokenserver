@@ -1,4 +1,4 @@
-# -*- coding: utf8 -*-
+# -*- coding: utf-8 -*-
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this file,
 # You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -8,9 +8,8 @@ for an 'application' variable
 """
 import os
 from logging.config import fileConfig
-from ConfigParser import NoSectionError
-
 from tokenserver.util import find_config_file
+from six.moves import configparser
 
 # setting up the egg cache to a place where apache can write
 os.environ['PYTHON_EGG_CACHE'] = '/tmp/python-eggs'
@@ -19,7 +18,7 @@ os.environ['PYTHON_EGG_CACHE'] = '/tmp/python-eggs'
 ini_file = find_config_file()
 try:
     fileConfig(ini_file)
-except NoSectionError:
+except configparser.NoSectionError:
     pass
 
 # running the app using Paste

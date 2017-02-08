@@ -16,6 +16,7 @@ from tokenserver.util import json_error, fxa_metrics_hash
 
 import browserid.errors
 
+import six
 
 logger = logging.getLogger("tokenserver")
 
@@ -55,7 +56,7 @@ def _invalid_client_state(reason, **kw):
 
 
 # validators
-def valid_assertion(request):
+def valid_assertion(request, **kwargs):
     """Validate that the assertion given in the request is correct.
 
     If not, add errors in the response so that the client can know what
@@ -135,7 +136,7 @@ def valid_assertion(request):
     request.metrics['device_id'] = device_id
 
 
-def valid_app(request):
+def valid_app(request, **kwargs):
     """Checks that the given application is one of the compatible ones.
 
     If it's not the case, a 404 is issued with the appropriate information.
@@ -159,7 +160,7 @@ def valid_app(request):
         request.validated['version'] = version
 
 
-def valid_client_state(request):
+def valid_client_state(request, **kwargs):
     """Checks for and validates the X-Client-State header."""
     client_state = request.headers.get('X-Client-State', '')
     if client_state:
@@ -169,7 +170,7 @@ def valid_client_state(request):
     request.validated['client-state'] = client_state
 
 
-def pattern_exists(request):
+def pattern_exists(request, **kwargs):
     """Checks that the given service do have an associated pattern in the db or
     in the configuration file.
 
@@ -214,7 +215,7 @@ def return_token(request):
     try:
         idp_claims = request.validated['assertion']['idpClaims']
         generation = idp_claims['fxa-generation']
-        if not isinstance(generation, (int, long)):
+        if not isinstance(generation, six.integer_types):
             raise _unauthorized("invalid-generation")
     except KeyError:
         generation = 0

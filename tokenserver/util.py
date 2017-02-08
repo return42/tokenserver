@@ -1,6 +1,7 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this file,
 # You can obtain one at http://mozilla.org/MPL/2.0/.
+
 import os
 from base64 import b32encode
 from hashlib import sha1, sha256
@@ -13,6 +14,7 @@ from pyramid import httpexceptions as exc
 
 from cornice.errors import Errors
 
+import six
 
 def monkey_patch_gevent():
     """Monkey-patch gevent into core and zmq."""
@@ -60,9 +62,11 @@ def fxa_metrics_hash(value, hmac_key):
     This is used to obfuscate the id before logging it with the metrics
     data, as a simple privacy measure.
     """
-    hasher = hmac.new(hmac_key, '', sha256)
+    hasher = hmac.new(hmac_key, b'', sha256)
+    if isinstance(value, six.text_type):
+        value = value.encode("utf-8")
     # value may be an email address, in which case we only want the first part
-    hasher.update(value.split("@", 1)[0])
+    hasher.update(value.split(b"@", 1)[0])
     return hasher.hexdigest()
 
 

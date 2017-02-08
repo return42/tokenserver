@@ -91,7 +91,7 @@ def process_account_event(config, body):
         email = event["uid"]
         if event_type == "reset":
             generation = event["generation"]
-    except (ValueError, KeyError), e:
+    except (ValueError, KeyError) as e:
         logger.exception("Invalid account message: %s", e)
     else:
         if email is not None:

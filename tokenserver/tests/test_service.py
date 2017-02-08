@@ -4,17 +4,16 @@
 import os
 import contextlib
 
-from webtest import TestApp
+import unittest
+import webtest
 from pyramid import testing
 from testfixtures import LogCapture
 
-from cornice.tests.support import CatchErrors
 from mozsvc.config import load_into_settings
 from mozsvc.plugin import load_and_register
 
 from tokenserver.assignment import INodeAssignment
 from tokenserver.verifiers import get_verifier
-from tokenserver.tests.support import unittest
 
 import browserid.errors
 from browserid.tests.support import make_assertion
@@ -22,6 +21,31 @@ from browserid.utils import get_assertion_info
 
 
 here = os.path.dirname(__file__)
+
+
+
+# the test suite is no longer a part of the cornice package, so I copied this
+# class from:
+#
+#   https://github.com/Cornices/cornice/blob/master/tests/support.py
+#
+from pyramid.httpexceptions import HTTPException
+from webob.dec import wsgify
+from webob import exc
+#
+class CatchErrors(object):
+
+    def __init__(self, app):
+        self.app = app
+        if hasattr(app, 'registry'):
+            self.registry = app.registry
+
+    @wsgify
+    def __call__(self, request):
+        try:
+            return request.get_response(self.app)
+        except (exc.HTTPException, HTTPException) as e:
+            return e
 
 
 class TestService(unittest.TestCase):
@@ -40,7 +64,7 @@ class TestService(unittest.TestCase):
         self.backend = self.config.registry.getUtility(INodeAssignment)
         wsgiapp = self.config.make_wsgi_app()
         wsgiapp = CatchErrors(wsgiapp)
-        self.app = TestApp(wsgiapp)
+        self.app = webtest.TestApp(wsgiapp)
         # Mock out the verifier to return successfully by default.
         self.mock_verifier_context = self.mock_verifier()
         self.mock_verifier_context.__enter__()

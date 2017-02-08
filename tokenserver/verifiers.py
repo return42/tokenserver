@@ -2,7 +2,7 @@ import json
 import warnings
 
 from pyramid.threadlocal import get_current_registry
-from zope.interface import implements, Interface
+from zope.interface import implementer, Interface
 
 import socket
 import requests
@@ -13,6 +13,7 @@ from browserid.errors import (InvalidSignatureError, ExpiredSignatureError,
                               InvalidIssuerError)
 from browserid.supportdoc import SupportDocumentManager
 
+import six
 
 def get_verifier(registry=None):
     """returns the registered verifier, building it if necessary."""
@@ -23,13 +24,13 @@ def get_verifier(registry=None):
 
 # This is to simplify the registering of the implementations using pyramid
 # registry.
-class IBrowserIdVerifier(Interface):
+class IBrowserIdVerifier(Interface): # pylint: disable=E0239
     pass
 
 
 # The default verifier from browserid
+@implementer(IBrowserIdVerifier)
 class LocalVerifier(LocalVerifier_):
-    implements(IBrowserIdVerifier)
 
     def __init__(self, **kwargs):
         """LocalVerifier constructor, with the following extra config options:
@@ -49,7 +50,7 @@ class LocalVerifier(LocalVerifier_):
         kwargs['supportdocs'] = SupportDocumentManager(verify=verify)
         super(LocalVerifier, self).__init__(**kwargs)
 
-    def _emit_warning():
+    def _emit_warning(self):
         """Emit a scary warning to discourage unverified SSL access."""
         msg = "browserid.ssl_certificate=False disables server's certificate"\
               "validation and poses a security risk. You should pass the path"\
@@ -65,20 +66,20 @@ class LocalVerifier(LocalVerifier_):
 # of the assertion, and hasn't been updated for the new BrowserID formats.
 # Rather than blocking on that work, we use a simple work-alike that doesn't
 # do any local inspection of the assertion.
+@implementer(IBrowserIdVerifier)
 class RemoteVerifier(object):
-    implements(IBrowserIdVerifier)
 
     def __init__(self, audiences=None, trusted_issuers=None,
                  allowed_issuers=None, verifier_url=None, timeout=None):
         # Since we don't parse the assertion locally, we cannot support
         # list- or pattern-based audience strings.
         if audiences is not None:
-            assert isinstance(audiences, basestring)
+            assert isinstance(audiences, six.string_types)
         self.audiences = audiences
-        if isinstance(trusted_issuers, basestring):
+        if isinstance(trusted_issuers, six.string_types):
             trusted_issuers = trusted_issuers.split()
         self.trusted_issuers = trusted_issuers
-        if isinstance(allowed_issuers, basestring):
+        if isinstance(allowed_issuers, six.string_types):
             allowed_issuers = allowed_issuers.split()
         self.allowed_issuers = allowed_issuers
         if verifier_url is None:
@@ -103,7 +104,7 @@ class RemoteVerifier(object):
                                          data=json.dumps(body),
                                          headers=headers,
                                          timeout=self.timeout)
-        except (socket.error, requests.RequestException), e:
+        except (socket.error, requests.RequestException) as e:
             msg = "Failed to POST %s. Reason: %s" % (self.verifier_url, str(e))
             raise ConnectionError(msg)
 
