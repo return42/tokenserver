@@ -14,7 +14,7 @@ class MemoryNodeAssignmentBackend(object):
     This is useful for testing purposes and probably not much else.
     """
 
-    def __init__(self, service_entry=None, **kw):
+    def __init__(self, service_entry=None, **_kw):
         self._service_entry = service_entry
         self._users = {}
         self._next_uid = 1

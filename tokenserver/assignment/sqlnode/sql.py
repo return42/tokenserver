@@ -1,6 +1,9 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this file,
 # You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# pylint: disable=C0103, R0913
+
 """
 SQLAlchemy-based node-assignment database.
 
@@ -10,6 +13,8 @@ with their load, capacity etc
 """
 import math
 import traceback
+import logging
+
 from mozsvc.exceptions import BackendError
 
 from sqlalchemy.sql import select, update, and_
@@ -17,16 +22,15 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 from sqlalchemy.pool import NullPool
 from sqlalchemy.sql import text as sqltext, func as sqlfunc
-from sqlalchemy.exc import OperationalError, TimeoutError
+from sqlalchemy.exc import OperationalError, TimeoutError   # pylint: disable=W0622
 
 from zope.interface import implementer
+
 from tokenserver.assignment import INodeAssignment
 from tokenserver.util import get_timestamp
 
 
-import logging
 logger = logging.getLogger('tokenserver.assignment.sqlnode')
-
 
 # The maximum possible generation number.
 # Used as a tombstone to mark users that have been "retired" from the db.
@@ -212,7 +216,7 @@ class SQLNodeAssignment(object):
             if create_tables:
                 table.create(checkfirst=True)
 
-    def _get_engine(self, service=None):
+    def _get_engine(self, service=None):  # pylint: disable=W0613
         return self._engine
 
     def _safe_execute(self, *args, **kwds):
@@ -636,11 +640,11 @@ class SQLNodeAssignment(object):
 
         return nodeid, node
 
-    def _get_services_table(self, service):
+    def _get_services_table(self, service):  # pylint: disable=W0613
         return self.services
 
-    def _get_nodes_table(self, service):
+    def _get_nodes_table(self, service):  # pylint: disable=W0613
         return self.nodes
 
-    def _get_users_table(self, service):
+    def _get_users_table(self, service):  # pylint: disable=W0613
         return self.users

@@ -1,6 +1,9 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this file,
 # You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# pylint: disable=C0103
+#
 """
 
 Script to emit total-user-count metrics for exec dashboard.
@@ -17,13 +20,12 @@ import json
 import socket
 import optparse
 from datetime import datetime, timedelta, tzinfo
+import logging
 
 from tokenserver.assignment import INodeAssignment
 import tokenserver.scripts
 
-import logging
 logger = logging.getLogger("tokenserver.scripts.count_users")
-
 ZERO = timedelta(0)
 
 

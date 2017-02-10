@@ -1,6 +1,9 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this file,
 # You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# pylint: disable=C0103
+
 """
 
 Script to update node status in the db.
@@ -31,7 +34,7 @@ def update_node(config_file, service, node, **kwds):
     try:
         backend = config.registry.getUtility(INodeAssignment)
         backend.update_node(service, node, **kwds)
-    except Exception:
+    except Exception:  # pylint: disable=W0703
         logger.exception("Error while updating node")
         return False
     else:

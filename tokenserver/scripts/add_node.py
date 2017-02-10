@@ -1,6 +1,9 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this file,
 # You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# pylint: disable=C0103
+
 """
 
 Script to add a new node to the system.
@@ -30,7 +33,7 @@ def add_node(config_file, service, node, capacity, **kwds):
     try:
         backend = config.registry.getUtility(INodeAssignment)
         backend.add_node(service, node, capacity, **kwds)
-    except Exception:
+    except Exception:   # pylint: disable=W0703
         logger.exception("Error while adding node")
         return False
     else:

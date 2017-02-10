@@ -2,13 +2,12 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this file,
 # You can obtain one at http://mozilla.org/MPL/2.0/.
 #
-# pylint: disable=C0413
+# pylint: disable=C0411, C0413, C0103
 
 import sys
 
 from tokenserver.util import monkey_patch_gevent
-runner = sys.argv[0]
-if runner.endswith('pytest'):
+if sys.argv[0].endswith('pytest'):
     monkey_patch_gevent()
 
 import logging
@@ -90,27 +89,26 @@ def includeme(config):
 
 
 class LazyDict(dict):
-    def __init__(self, callable):
+    def __init__(self, _callable):
         super(LazyDict, self).__init__()
-        self.callable = callable
+        self._callable = _callable
         self._loaded = False
 
-    def __getitem__(self, name):
+    def _init(self):
         if not self._loaded:
-            self.callable(self)
+            self._callable(self)
             self._loaded = True
+
+    def __getitem__(self, name):
+        self._init()
         return super(LazyDict, self).__getitem__(name)
 
     def __iter__(self):
-        if not self._loaded:
-            self.callable(self)
-            self._loaded = True
+        self._init()
         return super(LazyDict, self).__iter__()
 
     def keys(self):
-        if not self._loaded:
-            self.callable(self)
-            self._loaded = True
+        self._init()
         return super(LazyDict, self).keys()
 
 

@@ -1,6 +1,9 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this file,
 # You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# pylint: disable=C0103
+
 """
 
 Script to allocate a specific user to a node.
@@ -37,7 +40,7 @@ def allocate_user(config_file, service, email, node=None):
         else:
             backend.update_user(service, user, node=node)
         print(user["node"])
-    except Exception:
+    except Exception:  # pylint: disable=W0703
         logger.exception("Error while updating node")
         return False
     else:

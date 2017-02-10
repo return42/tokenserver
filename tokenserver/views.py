@@ -1,6 +1,9 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this file,
 # You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# pylint: disable=C0103, R0914, R0915, R0912
+
 import re
 import time
 import logging
@@ -32,14 +35,14 @@ def get_service_name(application, version):
     return "%s-%s" % (application, version)
 
 
-@discovery.get()
+@discovery.get()   # pylint: disable=E1101
 def _discovery(request):
     """Returns a JSON file listing the services supported by the server."""
     services = request.registry.settings['tokenserver.applications']
-    discovery = {}
-    discovery["services"] = services
-    discovery["auth"] = request.url.rstrip("/")
-    return discovery
+    d = {}
+    d["services"] = services
+    d["auth"] = request.url.rstrip("/")
+    return d
 
 
 def _unauthorized(status_message='error', **kw):
@@ -56,21 +59,21 @@ def _invalid_client_state(reason, **kw):
 
 
 # validators
-def valid_assertion(request, **kwargs):
+def valid_assertion(request, **_kwargs):
     """Validate that the assertion given in the request is correct.
 
     If not, add errors in the response so that the client can know what
     happened.
     """
-    token = request.headers.get('Authorization')
-    if token is None:
+    _token = request.headers.get('Authorization')
+    if _token is None:
         raise _unauthorized()
 
-    token = token.split()
-    if len(token) != 2:
+    _token = _token.split()
+    if len(_token) != 2:
         raise _unauthorized()
 
-    name, assertion = token
+    name, assertion = _token
     if name.lower() != 'browserid':
         resp = _unauthorized(description='Unsupported')
         resp.www_authenticate = ('BrowserID', {})
@@ -136,7 +139,7 @@ def valid_assertion(request, **kwargs):
     request.metrics['device_id'] = device_id
 
 
-def valid_app(request, **kwargs):
+def valid_app(request, **_kwargs):
     """Checks that the given application is one of the compatible ones.
 
     If it's not the case, a 404 is issued with the appropriate information.
@@ -160,7 +163,7 @@ def valid_app(request, **kwargs):
         request.validated['version'] = version
 
 
-def valid_client_state(request, **kwargs):
+def valid_client_state(request, **_kwargs):
     """Checks for and validates the X-Client-State header."""
     client_state = request.headers.get('X-Client-State', '')
     if client_state:
@@ -170,7 +173,7 @@ def valid_client_state(request, **kwargs):
     request.validated['client-state'] = client_state
 
 
-def pattern_exists(request, **kwargs):
+def pattern_exists(request, **_kwargs):
     """Checks that the given service do have an associated pattern in the db or
     in the configuration file.
 
@@ -192,7 +195,7 @@ def pattern_exists(request, **kwargs):
 VALIDATORS = (valid_app, valid_client_state, valid_assertion, pattern_exists)
 
 
-@token.get(validators=VALIDATORS)
+@token.get(validators=VALIDATORS)  # pylint: disable=E1101
 def return_token(request):
     """This service does the following process:
 
@@ -287,6 +290,7 @@ def return_token(request):
         'fxa_uid': request.validated['fxa_uid'],
         'device_id': request.validated['device_id']
     }
+    # pylint: disable=W0621
     token = tokenlib.make_token(token_data, secret=secret)
     secret = tokenlib.get_derived_secret(token, secret=secret)
 

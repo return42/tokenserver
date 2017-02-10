@@ -1,12 +1,21 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this file,
 # You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# pylint: disable=C0103, R0915, W1505
+
 import os
 import contextlib
 
 import unittest
 import webtest
+
+from webob.dec import wsgify
+from webob import exc
+
 from pyramid import testing
+from pyramid.httpexceptions import HTTPException
+
 from testfixtures import LogCapture
 
 from mozsvc.config import load_into_settings
@@ -20,18 +29,10 @@ from browserid.tests.support import make_assertion
 from browserid.utils import get_assertion_info
 
 
-here = os.path.dirname(__file__)
-
-
-
 # the test suite is no longer a part of the cornice package, so I copied this
 # class from:
 #
 #   https://github.com/Cornices/cornice/blob/master/tests/support.py
-#
-from pyramid.httpexceptions import HTTPException
-from webob.dec import wsgify
-from webob import exc
 #
 class CatchErrors(object):
 
@@ -55,6 +56,7 @@ class TestService(unittest.TestCase):
                             'test_memorynode.ini')
 
     def setUp(self):
+        # pylint: disable=R0204
         self.config = testing.setUp()
         settings = {}
         load_into_settings(self.get_ini(), settings)
@@ -86,10 +88,10 @@ class TestService(unittest.TestCase):
         del self.logs.records[:]
 
     @contextlib.contextmanager
-    def mock_verifier(self, response=None, exc=None):
+    def mock_verifier(self, response=None, exc=None): # pylint: disable=W0621
         def mock_verify_method(assertion):
             if exc is not None:
-                raise exc
+                raise exc  # pylint: disable=E0702
             if response is not None:
                 return response
             return {

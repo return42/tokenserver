@@ -1,6 +1,8 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this file,
 # You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# pylint: disable=C0103, W1505
 
 import unittest
 import os
@@ -26,6 +28,7 @@ def message_body(**kwds):
 
 
 class TestProcessAccountEvents(unittest.TestCase):
+    # pylint: disable=W0212
 
     def get_ini(self):
         return os.path.join(os.path.dirname(__file__),

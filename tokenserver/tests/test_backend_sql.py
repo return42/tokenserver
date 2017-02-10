@@ -1,3 +1,5 @@
+# pylint: disable=W1505
+
 import os
 import unittest
 
@@ -11,6 +13,7 @@ from tokenserver import load_endpoints
 
 
 class TestSQLBackend(unittest.TestCase):
+    # pylint: disable=W0212
 
     def setUp(self):
         super(TestSQLBackend, self).setUp()

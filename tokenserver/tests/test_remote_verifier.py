@@ -1,6 +1,8 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this file,
 # You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# pylint: disable=C0103, W1505
 
 import json
 import contextlib
@@ -13,7 +15,7 @@ from browserid.tests.support import make_assertion
 import browserid.errors
 
 
-class mockobj(object):
+class Mockobj(object):
     pass
 
 
@@ -28,11 +30,11 @@ class TestRemoteVerifier(unittest.TestCase):
             "mozsvc.secrets.FixedSecrets",
         "tokenserver.secrets.secrets":
             "steve-let-the-dogs-out",
-        "browserid.backend":
-            "tokenserver.verifiers.RemoteVerifier",
     }
 
-    def _make_config(self, settings={}):
+    def _make_config(self, settings=None):
+        if settings is None:
+            settings = {}
         all_settings = self.DEFAULT_SETTINGS.copy()
         all_settings.update(settings)
         config = Configurator(settings=all_settings)
@@ -42,10 +44,11 @@ class TestRemoteVerifier(unittest.TestCase):
 
     @contextlib.contextmanager
     def _mock_verifier(self, verifier, exc=None, **response_attrs):
-        def replacement_post_method(*args, **kwds):
+        def replacement_post_method(*_args, **_kwds):
             if exc is not None:
-                raise exc
-            response = mockobj()
+                raise exc  # pylint: disable=E0702
+            # pylint: disable=W0201
+            response = Mockobj()
             response.status_code = 200
             response.text = ""
             response.__dict__.update(response_attrs)

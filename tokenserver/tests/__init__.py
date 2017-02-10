@@ -5,4 +5,3 @@ try:
         __builtins__["DEBUG"] = set_trace
 except ImportError:
     pass
-

@@ -5,7 +5,7 @@ from browserid.tests.support import (make_assertion, get_keypair)
 
 # very dummy verifier
 class DummyVerifier(LocalVerifier):
-    def verify_certificate_chain(self, certs, *args, **kw):
+    def verify_certificate_chain(self, certs, *_args, **_kw):
         return certs[0]
 
 
@@ -16,7 +16,7 @@ def load_key(hostname):
     return get_keypair(hostname)[1]
 
 
-def sign_data(hostname, data, key=None):
+def sign_data(hostname, data, key=None):  # pylint: disable=W0613
     # load the cert with the private key
     return load_key(hostname).sign(data)
 

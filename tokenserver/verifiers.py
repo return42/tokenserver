@@ -1,16 +1,16 @@
 import json
 import warnings
+import socket
 
 from pyramid.threadlocal import get_current_registry
 from zope.interface import implementer, Interface
 
-import socket
 import requests
 
 from browserid.verifiers.local import LocalVerifier as LocalVerifier_
 from browserid.errors import (InvalidSignatureError, ExpiredSignatureError,
-                              ConnectionError, AudienceMismatchError,
-                              InvalidIssuerError)
+                              AudienceMismatchError,InvalidIssuerError)
+from browserid.errors import ConnectionError # pylint: disable=W0622
 from browserid.supportdoc import SupportDocumentManager
 
 import six

@@ -11,14 +11,14 @@ from tokenserver.assignment.sqlnode.schemas import (_UsersBase,
                                                     _add,
                                                     declared_attr)
 
-from tokenserver.assignment.sqlnode.schemas import get_cls   # NOQA
+from tokenserver.assignment.sqlnode.schemas import get_cls   # NOQA # pylint: disable=W0611
 
 
 class _SQLITENodesBase(_NodesBase):
     id = Column(Integer, primary_key=True)
 
     @declared_attr
-    def __table_args__(cls):
+    def __table_args__(cls):  # pylint: disable=E0213
         return ()
 
 _add('nodes', _SQLITENodesBase)
@@ -28,7 +28,7 @@ class _SQLITEUsersBase(_UsersBase):
     uid = Column(Integer, primary_key=True)
 
     @declared_attr
-    def __table_args__(cls):
+    def __table_args__(cls):  # pylint: disable=E0213
         return ()
 
 _add('users', _SQLITEUsersBase)

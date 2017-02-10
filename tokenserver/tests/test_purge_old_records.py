@@ -1,6 +1,8 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this file,
 # You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# pylint: disable=C0103, W1505
 
 import os
 import re
@@ -26,6 +28,7 @@ class TestPurgeOldRecordsScript(unittest.TestCase):
     test that it does the right thing.  We also run a mock downstream service
     so we can test that data-deletion requests go through ok.
     """
+    # pylint: disable=W0212
 
     def setUp(self):
         super(TestPurgeOldRecordsScript, self).setUp()

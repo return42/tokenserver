@@ -7,7 +7,7 @@ import time
 from pyramid.httpexceptions import HTTPException
 
 
-def set_x_timestamp_header(handler, registry):
+def set_x_timestamp_header(handler, registry):  # pylint: disable=W0613
     """Tween to set the X-Timestamp header on all responses."""
 
     def set_x_timestamp_header_tween(request):

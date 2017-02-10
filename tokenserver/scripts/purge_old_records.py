@@ -1,6 +1,9 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this file,
 # You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# pylint: disable=C0103, R0101
+
 """
 
 Script to purge user records that have been replaced.
@@ -65,7 +68,7 @@ def purge_old_records(config_file, grace_period=-1, max_per_loop=10,
                     backend.delete_user_record(service, row.uid)
                 if len(rows) < max_per_loop:
                     break
-    except Exception:
+    except Exception:  # pylint: disable=W0703
         logger.exception("Error while purging old user records")
         return False
     else:

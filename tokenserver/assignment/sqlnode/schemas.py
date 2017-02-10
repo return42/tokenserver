@@ -1,6 +1,9 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this file,
 # You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# pylint: disable=C0103
+
 """
 Table schema for MySQL and sqlite.
 
@@ -51,7 +54,7 @@ class _UsersBase(object):
     replaced_at = Column(BigInteger(), nullable=True)
 
     @declared_attr
-    def __table_args__(cls):
+    def __table_args__(cls):  # pylint: disable=E0213
         return (
             # Index used to slurp in all records for a (service, email)
             # pair, sorted by creation time.
@@ -105,7 +108,7 @@ class _NodesBase(object):
     backoff = Column(Integer, default=0, nullable=False)
 
     @declared_attr
-    def __table_args__(cls):
+    def __table_args__(cls):   # pylint: disable=E0213
         return (
             Index('unique_idx', 'service', 'node', unique=True),
             {'mysql_engine': 'InnoDB', 'mysql_charset': 'utf8'}

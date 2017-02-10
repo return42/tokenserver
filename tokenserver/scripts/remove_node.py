@@ -1,6 +1,9 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this file,
 # You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# pylint: disable=C0103
+
 """
 
 Script to remove a node from the system.
@@ -42,7 +45,7 @@ def remove_node(config_file, node):
             else:
                 found = True
                 logger.debug("  removed")
-    except Exception:
+    except Exception:   # pylint: disable=W0703
         logger.exception("Error while removing node")
         return False
     else:
