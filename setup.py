@@ -43,8 +43,6 @@ REQUIRES = ['cornice'
 
 EXTRAS_REQUIRE = {}
 
-TESTS_REQUIRES = []
-
 ENTRY_POINTS="""
 [paste.app_factory]
 main = tokenserver:main
@@ -66,8 +64,6 @@ setup(name                   = NAME
       , include_package_data = True
       , install_requires     = REQUIRES
       , extras_require       = EXTRAS_REQUIRE
-      # unfortunately test is not supported by pip (only 'setup.py test')
-      , tests_require        = TESTS_REQUIRES
       , test_suite           = NAME
       , zip_safe             = False
       , entry_points         = ENTRY_POINTS

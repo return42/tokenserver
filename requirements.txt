@@ -1,4 +1,6 @@
-# ----- required by externe
+# -------------------------------------
+# required for the period of transition
+# -------------------------------------
 
 -e file:../konfig#egg=konfig
 # konfig >= 2.0
@@ -16,16 +18,15 @@
 # pyramid_hawkauth >= 2.0
 # git+https://github.com/return42/pyramid_hawkauth@six#egg=pyramid_hawkauth
 
-# FIXME: ATM m2crypto is only available for Py2, This is my workaround to build
-# m2crypto for Py3 also. For this, a local checkout of the 'six' branch from
+# M2Crypto > 0.25.1
+#
+# FIXME: M2Crypto is only available for Py2. For the transition time, there is
+# the M2Crypto hack at:
 #
 #   https://github.com/return42/m2crypto/commits/six
 #
-# is needed.
-#
-# file:../m2crypto#egg=M2Crypto
-# M2Crypto > 0.25.1
-git+https://github.com/return42/m2crypto@six#egg=M2Crypto
+# git+https://github.com/return42/m2crypto@six#egg=M2Crypto
+-e file:../m2crypto#egg=M2Crypto --global-option="build_ext"
 
 
 # --------
